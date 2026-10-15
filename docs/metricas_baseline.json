@@ -1,0 +1,23 @@
+{
+  "baseline_sempre_positiva": {
+    "roc_auc": 0.5,
+    "pr_auc": 0.2913,
+    "precisao_neg": 0.0,
+    "recall_neg": 0.0,
+    "acuracia": 0.7087
+  },
+  "tfidf_logistica_com_acento": {
+    "roc_auc": 0.9709,
+    "pr_auc": 0.9269,
+    "precisao_neg": 0.8757,
+    "recall_neg": 0.8898,
+    "acuracia": 0.9311
+  },
+  "tfidf_logistica_sem_acento": {
+    "roc_auc": 0.9713,
+    "pr_auc": 0.9293,
+    "precisao_neg": 0.8782,
+    "recall_neg": 0.8972,
+    "acuracia": 0.9338
+  }
+}
