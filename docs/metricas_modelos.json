@@ -1,0 +1,30 @@
+{
+  "regressao_logistica": {
+    "roc_auc": 0.9713,
+    "pr_auc": 0.9293,
+    "precisao_neg": 0.8782,
+    "recall_neg": 0.8972,
+    "segundos_treino": 0.5
+  },
+  "arvore_profundidade_5": {
+    "roc_auc": 0.8579,
+    "pr_auc": 0.7002,
+    "precisao_neg": 0.7456,
+    "recall_neg": 0.7507,
+    "segundos_treino": 0.3
+  },
+  "arvore_profundidade_20": {
+    "roc_auc": 0.8962,
+    "pr_auc": 0.7507,
+    "precisao_neg": 0.7701,
+    "recall_neg": 0.8287,
+    "segundos_treino": 1.4
+  },
+  "random_forest": {
+    "roc_auc": 0.9637,
+    "pr_auc": 0.9119,
+    "precisao_neg": 0.7894,
+    "recall_neg": 0.9293,
+    "segundos_treino": 12.5
+  }
+}
