@@ -1,0 +1,23 @@
+{
+  "regressao_logistica": {
+    "roc_auc": 0.9713,
+    "pr_auc": 0.9293,
+    "segundos_treino": 0.3
+  },
+  "rede_1_camada_64": {
+    "roc_auc_media": 0.9727,
+    "roc_auc_dp": 0.0002,
+    "pr_auc_media": 0.9316,
+    "pr_auc_dp": 0.0005,
+    "epocas_media": 7.6,
+    "segundos_treino_media": 17.0
+  },
+  "rede_2_camadas_128_32": {
+    "roc_auc_media": 0.972,
+    "roc_auc_dp": 0.0004,
+    "pr_auc_media": 0.9294,
+    "pr_auc_dp": 0.0014,
+    "epocas_media": 5.4,
+    "segundos_treino_media": 27.1
+  }
+}
