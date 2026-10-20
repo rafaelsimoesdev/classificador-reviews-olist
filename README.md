@@ -29,7 +29,8 @@ Só entram na análise as avaliações que têm comentário em texto.
 - [x] Limpeza do texto
 - [x] Baseline e TF-IDF + regressão logística (ROC-AUC e PR-AUC)
 - [x] Comparação com árvore de decisão e Random Forest
-- [ ] Análise de erros: o que o modelo erra e por quê
+- [x] Análise de erros: o que o modelo erra e por quê
+- [x] Comparação com uma rede neural (MLP)
 - [ ] API com FastAPI, Docker e deploy no Google Cloud Run
 - [ ] Comparação com um LLM e limitações
 
@@ -113,6 +114,73 @@ Script: [`src/etapa5_arvores.py`](src/etapa5_arvores.py). Mesma divisão e mesmo
 - **O Random Forest tem o maior recall** (92,9%), mas com menos precisão. Parte disso vem do `class_weight="balanced"`, que o deixa mais sensível à classe negativa.
 - **Os modelos concordam na pista principal:** a palavra "não" é o termo mais importante em ambos, seguida de "recebi" e "não recebi".
 - **Limites:** uma única divisão aleatória e sem ajuste de hiperparâmetros do Random Forest. O que a comparação sustenta é que o Random Forest **não** supera a regressão logística aqui.
+
+---
+
+## Etapa 6: análise de erros
+
+Script: [`src/etapa6_analise_erros.py`](src/etapa6_analise_erros.py). Modelo analisado: TF-IDF + regressão logística, com acentos normalizados.
+
+O modelo errou **495 dos 7.476 comentários de teste (6,6%)**: 224 negativos classificados como positivos (falsos negativos) e 271 positivos classificados como negativos (falsos positivos).
+
+**Onde ele erra mais:**
+
+| Recorte | Taxa de erro |
+|---|---|
+| Nota 5 | 2,9% |
+| Nota 1 | 7,4% |
+| Nota 4 | 12,7% |
+| Nota 2 | **21,0%** |
+| Comentários de 1 a 3 palavras | 3,8% |
+| Comentários com 16 palavras ou mais | **11,8%** |
+
+- **Notas 2 e 4 são as mais difíceis**, porque ficam perto da fronteira entre satisfeito e insatisfeito.
+- **Comentários longos erram mais**, porque misturam elogio e reclamação. "Mas", "porém" e similares aparecem em 9,5% do teste, mas em 20% dos falsos negativos e 26% dos falsos positivos.
+
+### Lendo os erros: uma amostra de 50
+
+Para entender os erros, uma amostra aleatória de 50 deles foi lida e classificada em três grupos, com apoio de IA ([`docs/amostra_erros_rotulada.csv`](docs/amostra_erros_rotulada.csv)):
+
+| Grupo | Casos | Exemplo |
+|---|---|---|
+| **A nota contradiz o texto** | 12 (24%) | "excelente" com nota 1; "até agora não recebi" com nota 4 |
+| **Texto misto ou neutro** | 17 (34%) | "o produto é bom porém não veio na cor que solicitei" (nota 4) |
+| **Erro real do modelo** | 21 (42%) | "o produto chegou rasgado" (nota 2), classificado como positivo |
+
+- **Um quarto dos "erros" não é do modelo.** Nesses casos o texto diz uma coisa e a nota diz outra: o cliente provavelmente escolheu a nota errada, ou avaliou outra coisa (o vendedor, a entrega). O modelo leu o texto corretamente. Isso mostra um limite da própria base: a nota não é um rótulo perfeito do sentimento.
+- **Um terço é genuinamente ambíguo.** Comentários com elogio e crítica, ou só informativos ("o pedido foi cancelado por mim"), não têm uma resposta certa clara.
+- **Os erros reais são quase todos negativos perdidos** (19 de 21), e seguem um padrão: são **reclamações factuais, sem palavras de emoção**. "Chegou rasgado", "embalagem inadequada, chegou amassado", "venceu o prazo de entrega ontem". O modelo aprendeu a reconhecer "péssimo" e "não recomendo", mas não que "rasgado" e "amassado" também são problemas.
+
+A classificação tem subjetividade: outra pessoa poderia mover alguns casos entre "misto" e "erro do modelo" (por exemplo, "o jogo de cama é bonito, no entanto deixa a desejar em acabamento", com nota 2). Os números são uma estimativa, não uma medida exata.
+
+### O limiar de decisão
+
+Os negativos perdidos ficam com probabilidade entre 0,21 e 0,46, logo abaixo do limiar padrão de 0,5. Baixar o limiar recupera boa parte deles:
+
+| Limiar | Precisão | Recall | Comentários sinalizados |
+|---|---|---|---|
+| 0,5 (padrão) | 87,8% | 89,7% | 29,8% |
+| 0,4 | 84,5% | 92,4% | 31,9% |
+| 0,3 | 80,4% | 95,4% | 34,5% |
+| 0,2 | 73,8% | 97,6% | 38,5% |
+
+Para uma equipe de atendimento que quer encontrar avaliações negativas, perder uma reclamação custa mais do que ler um comentário a mais, então um limiar de 0,3 faz sentido. Esses números vêm do conjunto de teste; para escolher o limiar em produção, o certo é usar só o treino (validação cruzada), como no [Projeto 3](https://github.com/rafaelsimoesdev/deliveryrisk-api).
+
+---
+
+## Etapa 7: rede neural
+
+Script: [`src/etapa7_rede_neural.py`](src/etapa7_rede_neural.py). Mesma divisão e mesmo TF-IDF. Cada rede foi treinada 5 vezes com sementes diferentes, porque o resultado muda com a inicialização dos pesos.
+
+| Modelo | ROC-AUC | PR-AUC | Tempo de treino |
+|---|---|---|---|
+| Regressão logística | 0,971 | 0,929 | 0,3 s |
+| Rede com 1 camada (64 neurônios) | 0,973 ± 0,000 | 0,932 ± 0,001 | 17 s |
+| Rede com 2 camadas (128 e 32) | 0,972 ± 0,000 | 0,929 ± 0,001 | 27 s |
+
+- **A rede empata com a regressão logística.** Ela ganha 0,003 de PR-AUC, mas leva cerca de 50 vezes mais tempo para treinar. Mais camadas não ajudaram.
+- **Por quê:** com TF-IDF, cada palavra já é uma entrada separada, e o sinal é quase linear ("péssimo" puxa para negativo, "amei" para positivo). A regressão logística é, na prática, uma rede neural de um único neurônio com função sigmoide. Camadas extras só ajudam quando há padrões que as palavras soltas não mostram, e para captá-los a rede precisaria de representações como embeddings.
+- **Decisão:** a regressão logística segue como o modelo do projeto. É tão boa quanto a rede, mais rápida e explicável pelos coeficientes.
 
 ---
 

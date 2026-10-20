@@ -1,0 +1,51 @@
+review_score,prob_neg,tipo_erro,categoria,texto_original
+4,0.879050007150534,falso_positivo,misto_ou_neutro,"só uma crítica, o site saiu do ar a parte dos pedidos e não pude rastrea-lo. site muito ruim nessa parte. e na central não tem como reclamar sem o número do pedido, ou seja, sem comunicação, só espera"
+2,0.2343807873907376,falso_negativo,erro_do_modelo,kd o rôdo?
+4,0.6194281429081896,falso_positivo,misto_ou_neutro,"gostei do produto, porém o visor do sensor está trincado em 2 partes, por ser um produto novo não deveria estar com estas características, como está funcionando direito deixei passar."
+1,0.4271740795375672,falso_negativo,erro_do_modelo,tem que ter um mínimo de atenção ao cliente
+4,0.6504785174044281,falso_positivo,misto_ou_neutro,"quando comprei o prazo era um e depois de comprar aumentou em uns 20 dias, recebi antes, porém o vendedor nunca atualizava as informações no site."
+1,0.458270733932785,falso_negativo,erro_do_modelo,"a loja enviou outro produto no lugar, sem previa autorização"
+1,0.3839508419001835,falso_negativo,erro_do_modelo,"produto com embalagem inadequada, parte central do espremedor chegou amassado."
+1,0.2069933416451578,falso_negativo,erro_do_modelo,demora. eu compro tudo pelo baratheon aí vem tudo separado no cartão. pq as lojas são diferentes. horrível
+5,0.6383476576154317,falso_positivo,misto_ou_neutro,"o produto chegou a ser entregue, porém foi recusado, poisja havia cancelado por ter comprado o tamanho errado!"
+2,0.009618713406528,falso_negativo,nota_contradiz_texto,"super recomendo, veio antes do prazo ...."
+2,0.3035420514874664,falso_negativo,erro_do_modelo,ainda não vi o produto pessoalmente mas o prazo inicial foi extrapolado.
+1,0.4526292485235166,falso_negativo,erro_do_modelo,😡😡😡😡😡👎👎👎👎👎 empresa sem compromisso com o cliente
+4,0.5351071804191952,falso_positivo,misto_ou_neutro,"a vendedora targaryen poderia utilizar outras empresas para a logistica, talvez uma transoortadora particular. infelizmente os correios não é um distribuidor confiável."
+1,0.4436941609483482,falso_negativo,erro_do_modelo,produto com meia hora de uso já descolou o adesivo e a madeira simplesmente descamando .itens de segurança todos muito fracos e ocos além do que os elásticos para prender são muito curtos .
+2,0.301217014948628,falso_negativo,erro_do_modelo,produto venceu o prazo de entrega ontem.
+5,0.5875760328636013,falso_positivo,erro_do_modelo,"o produto veio numa embalagem superprotegida, o que mostra o cuidado do vendedor para com o cliente."
+5,0.8698211887996112,falso_positivo,misto_ou_neutro,"o produto é ótimo e foi postado na data. o atraso na entrega foi culpa dos correios, que não vieram entregar, alegando que não tinha ninguém. depois entregaram o aviso no último dia. quase não recebi"
+1,0.069413131723537,falso_negativo,nota_contradiz_texto,superou as expectativas...
+1,0.3602968298934307,falso_negativo,misto_ou_neutro,produto. veio enrolado em plastico bolha
+4,0.9592650358437056,falso_positivo,nota_contradiz_texto,solicitei a devolução porém não recebi os procedimentos... produto diferente da foto no site
+4,0.8439046330088134,falso_positivo,misto_ou_neutro,"recebi parcial, faltou a capinha, mas o fornecedor mandou uma carta dizendo que será enviado em breve, agora estou no aguardo. isso não é uma reclamação, apenas um comentário que ainda nao recebi tudo"
+4,0.586180440003765,falso_positivo,misto_ou_neutro,"só recebi um dos dois produtos, mas até agora tudo ocorreu bem"
+4,0.9735388855607024,falso_positivo,nota_contradiz_texto,"ainda estou esperando , recebi um produto comprei 4"
+1,0.2343807873907376,falso_negativo,erro_do_modelo,porcaria7
+2,0.2322794542531083,falso_negativo,erro_do_modelo,o produto chegou rasgado
+1,0.2834893048293185,falso_negativo,erro_do_modelo,queria meu pedido conforme ilustrado na figura para mim viria a torneira elétrica conforme a ilustração......
+4,0.7171322330284046,falso_positivo,misto_ou_neutro,"o produto é bom porém não veio na cor que solicitei. não tenho tempo para trocar, então tive que ficar com essa cor mesmo."
+4,0.9397799383344412,falso_positivo,nota_contradiz_texto,uma das bonecas não é a que escolhi. bebe real lacinho está com a roupinha e a fisionomia diferente. me parece que enviaram um outro modelo.
+1,0.2376916025508161,falso_negativo,erro_do_modelo,"não fiquei satisfeita com a qualidade do produto, a panela vaza muito vapor e agua durante o cozimento."
+1,0.2343807873907376,falso_negativo,misto_ou_neutro,.
+5,0.8525374404111957,falso_positivo,misto_ou_neutro,"não recebi o produto no prazo, porem endento que o problema não foi da loja, pois quando eu comprei em seguida tivemos a greve dos caminhoneiros."
+2,0.2367607037995441,falso_negativo,erro_do_modelo,insatisfação 1
+1,0.3621702303739786,falso_negativo,erro_do_modelo,tá demorando mt
+2,0.0046484297986284,falso_negativo,nota_contradiz_texto,otimo
+4,0.9461665151866416,falso_positivo,nota_contradiz_texto,ainda não recebi o outro produto
+2,0.2386083419337045,falso_negativo,erro_do_modelo,o produto chegou amassado e com um pouco de perda do líquido do frasco
+1,0.4635819753993406,falso_negativo,erro_do_modelo,faltou 1 rede chegar chegou somente 1 rede
+2,0.4353219214551678,falso_negativo,misto_ou_neutro,"o jogo de cama faz juz à imagem apresentada no produto, é bonito, no entanto deixa a desejar em acabamento, muita linha solta e a costura foi refeita deixando falha no tecido."
+4,0.900364733549196,falso_positivo,nota_contradiz_texto,dessa vez eles tinham o produto e nao me devolveram o dinhiero
+5,0.6229610172931346,falso_positivo,misto_ou_neutro,o pedido foi cancelado por mim.
+2,0.447369436559823,falso_negativo,erro_do_modelo,"pensei que o defletor era uma grande placa, porém são 3 pequenas peças, que se encaixam uma na outra. sinceramente não gostei pois no mercado há opção de peça única, mais bonita e com melhor design."
+4,0.9965221324208644,falso_positivo,nota_contradiz_texto,até agora não recebi
+2,0.078910597036277,falso_negativo,nota_contradiz_texto,funcionou perfeitamente
+5,0.6235892871439935,falso_positivo,erro_do_modelo,mais rápido que o imaginado. não tem frescura de entregar na favela
+1,0.0016222677074088,falso_negativo,nota_contradiz_texto,excelente
+2,0.0106630577437532,falso_negativo,nota_contradiz_texto,entregue dentro do prazo
+5,0.6492360716939486,falso_positivo,misto_ou_neutro,"tive que escolher outro modelo, pois esse nao havia mais"
+2,0.4250693423502022,falso_negativo,erro_do_modelo,"recebi o produto numa embalagem de papel, geralmente esses relógios vem numa embalagem de materiais duro etc, fiquei com medo de ser falsificado."
+2,0.2565028047210582,falso_negativo,misto_ou_neutro,"controle é bom, levando em conta que não é original. teclado mole, a única coisa que achei ruim."
+5,0.501305110747897,falso_positivo,misto_ou_neutro,boa qualidade do material e da impressão. demora na entrega.
