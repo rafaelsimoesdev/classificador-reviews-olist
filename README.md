@@ -1,10 +1,27 @@
 # Classificador de Reviews Olist
 
+[![Testes da API](https://github.com/rafaelsimoesdev/classificador-reviews-olist/actions/workflows/testes.yml/badge.svg)](https://github.com/rafaelsimoesdev/classificador-reviews-olist/actions/workflows/testes.yml)
+
 **Autor:** Rafael Simões  
 **Dataset:** [Brazilian E-Commerce Public Dataset by Olist, Kaggle](https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce)  
 **Pergunta:** Dado o comentário de um cliente, a avaliação é positiva ou negativa?
 
-> **Status:** em desenvolvimento. Este README é atualizado a cada etapa.
+**🔗 Demo ao vivo:** [Testar a API (Swagger)](https://reviews-olist-api-889571326423.southamerica-east1.run.app/docs)  
+*Python · scikit-learn · FastAPI · Docker · GCP Cloud Run · GitHub Actions*
+
+> A API fica parada quando ninguém usa, então a primeira chamada pode levar alguns segundos.
+
+---
+
+## Resultados em resumo
+
+![Comparação de modelos](docs/comparacao_modelos.png)
+
+- **37.380 comentários reais**, 29% negativos. Um palpite sem informação teria PR-AUC de 0,29; o modelo chega a **0,93**.
+- **O modelo mais simples venceu.** A regressão logística empatou com uma rede neural e treinou cerca de 50 vezes mais rápido, além de explicar cada decisão pelas palavras que pesaram.
+- **Nem todo erro é do modelo.** Numa amostra de 50 erros, um quarto tinha texto e nota contraditórios ("excelente" com nota 1).
+- **Os erros reais eram reclamações sem emoção** ("o produto chegou rasgado"). Com o limiar escolhido só no treino, o modelo encontra **94,7% das avaliações negativas**, com 81% de precisão.
+- **No ar:** API com FastAPI, Docker e Google Cloud Run, com testes automáticos a cada commit.
 
 ---
 
@@ -22,7 +39,7 @@ Depois de prever atrasos de entrega ([Projeto 2](https://github.com/rafaelsimoes
 
 Só entram na análise as avaliações que têm comentário em texto.
 
-## Plano
+## Etapas do projeto
 
 - [x] Exploração dos dados (notas, comentários, tamanho do texto)
 - [x] Definição do alvo e análise do desbalanceamento
@@ -31,8 +48,9 @@ Só entram na análise as avaliações que têm comentário em texto.
 - [x] Comparação com árvore de decisão e Random Forest
 - [x] Análise de erros: o que o modelo erra e por quê
 - [x] Comparação com uma rede neural (MLP)
-- [ ] API com FastAPI, Docker e deploy no Google Cloud Run
-- [ ] Comparação com um LLM e limitações
+- [x] Modelo final com limiar escolhido no treino
+- [x] API com FastAPI, Docker e deploy no Google Cloud Run
+- [x] Testes automáticos da API (GitHub Actions)
 
 ## Etapa 2: exploração das reviews
 
@@ -164,7 +182,7 @@ Os negativos perdidos ficam com probabilidade entre 0,21 e 0,46, logo abaixo do 
 | 0,3 | 80,4% | 95,4% | 34,5% |
 | 0,2 | 73,8% | 97,6% | 38,5% |
 
-Para uma equipe de atendimento que quer encontrar avaliações negativas, perder uma reclamação custa mais do que ler um comentário a mais, então um limiar de 0,3 faz sentido. Esses números vêm do conjunto de teste; para escolher o limiar em produção, o certo é usar só o treino (validação cruzada), como no [Projeto 3](https://github.com/rafaelsimoesdev/deliveryrisk-api).
+Para uma equipe de atendimento que quer encontrar avaliações negativas, perder uma reclamação custa mais do que ler um comentário a mais, então um limiar mais baixo faz sentido. Esses números vêm do conjunto de teste e servem só para mostrar a troca. O limiar usado na API foi escolhido apenas com dados de treino, na [etapa 8](#etapa-8-modelo-final-e-api).
 
 ---
 
@@ -184,16 +202,117 @@ Script: [`src/etapa7_rede_neural.py`](src/etapa7_rede_neural.py). Mesma divisão
 
 ---
 
+## Etapa 8: modelo final e API
+
+Script: [`src/etapa8_treinar_modelo_final.py`](src/etapa8_treinar_modelo_final.py)
+
+A análise de erros mostrou que muitas reclamações factuais ("chegou rasgado") ficam logo abaixo do limiar padrão de 0,5. Para a API, o limiar foi escolhido **só com os dados de treino** (predições out-of-fold), buscando encontrar pelo menos 95% das avaliações negativas. O teste foi usado uma única vez, para medir:
+
+| Limiar | Precisão | Recall | Comentários sinalizados |
+|---|---|---|---|
+| 0,50 (padrão) | 87,8% | 89,7% | 29,8% |
+| **0,31 (escolhido no treino)** | **81,0%** | **94,7%** | 34,0% |
+
+Depois da avaliação, o modelo foi retreinado com os 37.380 comentários e salvo com as mesmas versões usadas na API (scikit-learn 1.5.2), para evitar incompatibilidade ao carregar o arquivo.
+
+### Usando a API
+
+```bash
+curl -X POST "https://reviews-olist-api-889571326423.southamerica-east1.run.app/classificar" \
+  -H "Content-Type: application/json" \
+  -d '{"texto": "O produto chegou rasgado"}'
+```
+
+```json
+{
+  "negativa": true,
+  "probabilidade_negativa": 0.379,
+  "confianca": "BAIXA",
+  "termos_relevantes": ["chegou rasgado", "rasgado", "produto"]
+}
+```
+
+| Endpoint | O que faz |
+|---|---|
+| `POST /classificar` | Classifica um comentário |
+| `GET /model/info` | Limiar, métricas e termos mais importantes do modelo |
+| `GET /health` | Verificação de saúde (Cloud Run) |
+| `GET /docs` | Documentação interativa (Swagger) |
+
+- **`termos_relevantes`** mostra as palavras do comentário que mais pesaram na decisão (peso TF-IDF × coeficiente da regressão logística). É a vantagem de um modelo linear: dá para explicar cada resposta.
+- **`confianca`** indica a distância até o limiar. "BAIXA" significa que o comentário está perto da fronteira e vale uma leitura humana.
+
+### Rodando localmente
+
+```bash
+pip install -r requirements.txt
+uvicorn app.main:app --port 8080
+# ou com Docker
+docker build -t reviews-olist-api . && docker run -p 8080:8080 reviews-olist-api
+```
+
+### Testes
+
+[`tests/test_api.py`](tests/test_api.py) verifica comentários claramente negativos e positivos, se acentos e maiúsculas mudam o resultado (não devem), a rejeição de texto vazio e as informações do modelo. Eles rodam automaticamente no GitHub Actions a cada commit.
+
+```bash
+pip install -r requirements.txt -r requirements-dev.txt
+pytest
+```
+
+---
+
+## Limitações
+
+- **A nota não é um rótulo perfeito.** Na amostra de erros, cerca de um quarto dos casos tinha texto e nota contraditórios. Parte do erro medido é da base, não do modelo.
+- **O modelo conhece palavras, não contexto.** Ironia e comentários que misturam elogio e crítica continuam difíceis.
+- **Dados de 2016 a 2018.** O vocabulário dos clientes pode ter mudado; em produção seria preciso monitorar e retreinar.
+- **Uma única divisão de teste.** As diferenças pequenas entre modelos (por exemplo, rede neural contra regressão logística) estão dentro do que pode variar com outra divisão.
+
+---
+
+## Próximos passos
+
+- **Comparar com um LLM:** classificar uma amostra com um modelo de linguagem e comparar acerto, custo e casos difíceis (ironia, comentários mistos).
+- **Automação:** um fluxo que recebe avaliações novas, chama a API e avisa a equipe quando uma é negativa.
+
+---
+
 ## Estrutura
 
 ```
 classificador-reviews-olist/
+├── .github/      # testes automáticos (GitHub Actions)
+├── app/          # API (FastAPI)
+├── model/        # modelo treinado (model.pkl)
 ├── dados/        # CSVs do Kaggle (não versionados, crie a pasta localmente)
 ├── src/          # scripts de cada etapa
 ├── docs/         # gráficos e métricas
+├── tests/        # testes da API
+├── Dockerfile
+├── requirements.txt       # API
+├── requirements-dev.txt   # treino, gráficos e testes
 └── README.md
 ```
 
-## Como obter os dados
+## Como reproduzir
 
-Baixe o dataset no [Kaggle](https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce) e coloque `olist_order_reviews_dataset.csv` na pasta `dados/`.
+1. Baixe o dataset no [Kaggle](https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce) e coloque `olist_order_reviews_dataset.csv` na pasta `dados/`.
+2. Instale as dependências: `pip install -r requirements.txt -r requirements-dev.txt`
+3. Rode os scripts em ordem, da raiz do projeto:
+
+```bash
+python src/etapa2_explorar_reviews.py
+python src/etapa3_limpar_texto.py              # gera dados/reviews_limpas.csv
+python src/etapa4_baseline_regressao_logistica.py
+python src/etapa5_arvores.py
+python src/etapa6_analise_erros.py
+python src/etapa7_rede_neural.py               # leva 1 a 2 minutos
+python src/etapa8_treinar_modelo_final.py      # gera model/model.pkl
+python src/grafico_comparacao_modelos.py       # gera docs/comparacao_modelos.png
+```
+
+---
+
+**Autor:** Rafael Simões · [LinkedIn](https://linkedin.com/in/rafael-sim%C3%B5es-556979239) · [GitHub](https://github.com/rafaelsimoesdev)  
+Outros projetos: [Previsão de Atraso de Entrega](https://github.com/rafaelsimoesdev/previsao-atraso-entregas) · [DeliveryRisk API](https://github.com/rafaelsimoesdev/deliveryrisk-api)
