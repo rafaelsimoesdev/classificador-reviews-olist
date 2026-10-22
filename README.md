@@ -52,6 +52,8 @@ Só entram na análise as avaliações que têm comentário em texto.
 - [x] API com FastAPI, Docker e deploy no Google Cloud Run
 - [x] Testes automáticos da API (GitHub Actions)
 
+> A numeração segue os scripts em `src/`: a etapa 1 é baixar o dataset do Kaggle (veja [Como reproduzir](#como-reproduzir)).
+
 ## Etapa 2: exploração das reviews
 
 Script: [`src/etapa2_explorar_reviews.py`](src/etapa2_explorar_reviews.py)
