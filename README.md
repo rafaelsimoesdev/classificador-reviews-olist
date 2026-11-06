@@ -27,7 +27,7 @@
 
 ## Contexto
 
-Depois de prever atrasos de entrega ([Projeto 2](https://github.com/rafaelsimoesdev/previsao-atraso-entregas) e [Projeto 3](https://github.com/rafaelsimoesdev/deliveryrisk-api)), este projeto olha para o outro lado da operação: o que o cliente escreve depois de receber o pedido. Ler milhares de comentários manualmente não escala. Um classificador de texto permite priorizar as avaliações negativas e descobrir o que as motiva.
+Depois de prever atrasos de entrega ([Previsão de Atraso de Entrega](https://github.com/rafaelsimoesdev/previsao-atraso-entregas) e [DeliveryRisk API](https://github.com/rafaelsimoesdev/deliveryrisk-api)), este projeto olha para o outro lado da operação: o que o cliente escreve depois de receber o pedido. Ler milhares de comentários manualmente não escala. Um classificador de texto permite priorizar as avaliações negativas e descobrir o que as motiva.
 
 ## Definição do alvo
 
@@ -317,4 +317,4 @@ python src/grafico_comparacao_modelos.py       # gera docs/comparacao_modelos.pn
 ---
 
 **Autor:** Rafael Simões · [LinkedIn](https://linkedin.com/in/rafael-sim%C3%B5es-556979239) · [GitHub](https://github.com/rafaelsimoesdev)  
-Outros projetos: [Previsão de Atraso de Entrega](https://github.com/rafaelsimoesdev/previsao-atraso-entregas) · [DeliveryRisk API](https://github.com/rafaelsimoesdev/deliveryrisk-api)
+Outros projetos: [Torre de Controle de E-commerce com IA](https://github.com/rafaelsimoesdev/torre-controle-ecommerce-ia) · [Previsão de Atraso de Entrega](https://github.com/rafaelsimoesdev/previsao-atraso-entregas) · [DeliveryRisk API](https://github.com/rafaelsimoesdev/deliveryrisk-api)
