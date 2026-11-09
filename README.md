@@ -316,5 +316,5 @@ python src/grafico_comparacao_modelos.py       # gera docs/comparacao_modelos.pn
 
 ---
 
-**Autor:** Rafael Simões · [LinkedIn](https://linkedin.com/in/rafael-sim%C3%B5es-556979239) · [GitHub](https://github.com/rafaelsimoesdev)  
+**Autor:** Rafael Simões · [LinkedIn](https://www.linkedin.com/in/rafaelsimoesdev) · [GitHub](https://github.com/rafaelsimoesdev)  
 Outros projetos: [Torre de Controle de E-commerce com IA](https://github.com/rafaelsimoesdev/torre-controle-ecommerce-ia) · [Previsão de Atraso de Entrega](https://github.com/rafaelsimoesdev/previsao-atraso-entregas) · [DeliveryRisk API](https://github.com/rafaelsimoesdev/deliveryrisk-api)
